@@ -2,6 +2,7 @@ package cn.jxy.utils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -18,7 +19,7 @@ public class JdbcUtils {
 	// 在项目开发中,配置文件、jar、class文件通常只需要加载一次,在java中有静态块可以实现此功能
 	// static是在当前的class文件被加载的时候执行,且仅仅执行一次
 	static {
-//		System.out.println("-----只打印一次------");
+		System.out.println("-----只打印一次------");
 		// 需要加载数据库驱动(根据类全名,来加载唯一的*.class文件)
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -39,15 +40,28 @@ public class JdbcUtils {
 	}
 
 	public static void close(Statement pre, Connection conn) {
+		close(null, pre, conn);
+	}
+
+	public static void close(ResultSet rs, Statement pre, Connection conn) {
 		try {
-			pre.close();
+			if (rs != null && !rs.isClosed())
+				rs.close();
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		} finally {
 			try {
-				conn.close();
+				if (pre != null && !pre.isClosed())
+					pre.close();
 			} catch (SQLException e) {
 				throw new RuntimeException(e);
+			} finally {
+				try {
+					if (conn != null && !conn.isClosed())
+						conn.close();
+				} catch (SQLException e) {
+					throw new RuntimeException(e);
+				}
 			}
 		}
 	}
