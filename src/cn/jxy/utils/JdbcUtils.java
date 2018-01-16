@@ -4,9 +4,13 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 /*
- * 主要来实现与数据库的连接
+ * 工具类: 主要来实现与数据库的连接
+ * 静态类: 不想new对象,在java中工具类、Service、Dao、controller等等后面采用spring来管理时都是单例模式
+ * filter/servlet/listener:也是单例模式
  * */
 public class JdbcUtils {
+	
+	private JdbcUtils(){} // 构造方法必须私有
 	
 	// 在项目开发中,配置文件、jar、class文件通常只需要加载一次,在java中有静态块可以实现此功能
 	// static是在当前的class文件被加载的时候执行,且仅仅执行一次
