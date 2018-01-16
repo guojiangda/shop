@@ -32,6 +32,7 @@ public class ProductDaoImplTest {
 	@Test
 	public void testQueryByName() {
 		List<Product> proList = daoImpl.queryByName("");
+		System.out.println("查询方法已经执行完毕.................");
 		for(Product product:proList){
 			System.out.println(product);
 		}

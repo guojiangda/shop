@@ -37,7 +37,7 @@ public class BaseDaoImpl<T> {
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		} finally {
-			// 4： 释放资源
+			// 4： 释放资源(数据库访问、IO、Properties、文件上传、下载都需要关闭相关操作)
 			JdbcUtils.close(rs, pre, conn);
 		}
 	}
