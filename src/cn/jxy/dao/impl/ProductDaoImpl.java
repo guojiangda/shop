@@ -9,20 +9,11 @@ import cn.jxy.model.Product;
 import cn.jxy.utils.JdbcUtils;
 
 public class ProductDaoImpl {
-
-	public static void main(String[] args) {
-		ProductDaoImpl daoImpl = new ProductDaoImpl();
-
-		// daoImpl.save(new Product("demo", 3.14, "测试代码！！！"));
-
-		// Product product = new Product("demo2", 3.15, "测试代码2！！！");
-		// product.setId(4);
-		// daoImpl.update(product);
-
-//		daoImpl.delete(4);
-		
-		System.out.println(daoImpl.getById(1));
-	}
+	
+	// main测试缺点: 不能并行测试, 有侵入性
+//	public static void main(String[] args) {
+//	
+//	}
 
 	public Product getById(int id) {
 		Product product = null;
