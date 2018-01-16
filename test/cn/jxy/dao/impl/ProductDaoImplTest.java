@@ -24,7 +24,7 @@ public class ProductDaoImplTest {
 
 	@Test
 	public void testGetById() {
-		System.out.println(daoImpl.getById(1));
+		System.out.println(daoImpl.getById(2));
 	}
 
 	@Test
