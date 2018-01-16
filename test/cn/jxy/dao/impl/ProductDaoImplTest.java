@@ -1,5 +1,7 @@
 package cn.jxy.dao.impl;
 
+import java.util.List;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -25,6 +27,14 @@ public class ProductDaoImplTest {
 	@Test
 	public void testGetById() {
 		System.out.println(daoImpl.getById(2));
+	}
+	
+	@Test
+	public void testQueryByName() {
+		List<Product> proList = daoImpl.queryByName("");
+		for(Product product:proList){
+			System.out.println(product);
+		}
 	}
 
 	@Test

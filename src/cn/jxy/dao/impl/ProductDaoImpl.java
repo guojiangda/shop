@@ -2,26 +2,43 @@ package cn.jxy.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import cn.jxy.model.Product;
+import cn.jxy.utils.RowMapper;
 
 public class ProductDaoImpl extends BaseDaoImpl<Product> {
-
-	@Override  
-	public Product getRow(ResultSet rs) throws SQLException {
-		Product product = null;
-		product = new Product();
-		product.setId(rs.getInt("id"));
-		product.setName(rs.getString("name"));
-		product.setPrice(rs.getDouble("price"));
-		product.setRemark(rs.getString("remark"));
-		return product;
+	
+	public List<Product> queryByName(String keyword) {
+		String sql = "select * from product where name like ?";
+//		jdbcTemplate.query(sql, args, rowMapper)
+		return super.queryByName(sql, new Object[] { "%" + keyword + "%" },new RowMapper<Product>() {
+			@Override
+			public Product mapRow(ResultSet rs) throws SQLException {
+				Product product = new Product();
+				product.setId(rs.getInt("id"));
+				product.setName(rs.getString("name"));
+				product.setPrice(rs.getDouble("price"));
+				product.setRemark(rs.getString("remark"));
+				return product;
+			}
+			
+		});
 	}
 
 	public Product getById(int id) {
 		// Product product = null;
-		String sql = "select * from product where id = ?";
-		return super.getById(sql, id);
+		String sql = "select id,name from product where id = ?";
+		return super.getById(sql, id,new RowMapper<Product>() {
+			@Override
+			public Product mapRow(ResultSet rs) throws SQLException {
+				Product product = new Product();
+				product.setId(rs.getInt("id"));
+				product.setName(rs.getString("name"));
+				return product;
+			}
+			
+		});
 	}
 
 	// 数据入库操作
