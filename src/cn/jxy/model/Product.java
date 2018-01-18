@@ -1,8 +1,9 @@
 package cn.jxy.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Product {
+public class Product implements Serializable {
 
 	private Integer id;
 	private String name;
