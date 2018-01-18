@@ -83,5 +83,16 @@ public class ClassDemo {
 		// ClassDemo.classDemo();
 		// ClassDemo.methodDemo();
 		ClassDemo.fieldDemo();
+		// 在运行时候获取Class有三种方式
+		Class clazz = Class.forName("cn.jxy.model.Product");
+		Class clazz2 = Product.class;
+		Product product = new Product();
+		Class class3 = product.getClass();
+		System.out.println(clazz == clazz2 && clazz2 == class3);
 	}
 }
+
+
+
+
+

@@ -12,33 +12,13 @@ public class ProductDaoImpl extends BaseDaoImpl<Product> {
 	public List<Product> queryByName(String keyword) {
 		String sql = "select * from product where name like ?";
 //		jdbcTemplate.query(sql, args, rowMapper)
-		return super.queryByName(sql, new Object[] { "%" + keyword + "%" },new RowMapper<Product>() {
-			@Override
-			public Product mapRow(ResultSet rs) throws SQLException {
-				Product product = new Product();
-				product.setId(rs.getInt("id"));
-				product.setName(rs.getString("name"));
-				product.setPrice(rs.getDouble("price"));
-				product.setRemark(rs.getString("remark"));
-				return product;
-			}
-			
-		});
+		return super.queryByName(sql, new Object[] { "%" + keyword + "%" },Product.class);
 	}
 
 	public Product getById(int id) {
 		// Product product = null;
-		String sql = "select id,name from product where id = ?";
-		return super.getById(sql, id,new RowMapper<Product>() {
-			@Override
-			public Product mapRow(ResultSet rs) throws SQLException {
-				Product product = new Product();
-				product.setId(rs.getInt("id"));
-				product.setName(rs.getString("name"));
-				return product;
-			}
-			
-		});
+		String sql = "select id,name,remark,price from product where id = ?";
+		return super.getById(sql, id,Product.class);
 	}
 
 	// 数据入库操作

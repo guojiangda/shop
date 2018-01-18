@@ -1,13 +1,15 @@
 package cn.jxy.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Locale.Category;
 
 public class Product implements Serializable {
 
 	private Integer id;
 	private String name;
-	private Double price;
+	private BigDecimal price;
 	private String remark;
 	private Date date;
 	private String pic;
@@ -23,7 +25,7 @@ public class Product implements Serializable {
 		super();
 	}
 
-	public Product(String name, Double price, String remark) {
+	public Product(String name, BigDecimal price, String remark) {
 		super();
 		this.name = name;
 		this.price = price;
@@ -54,11 +56,11 @@ public class Product implements Serializable {
 		this.name = name;
 	}
 
-	public Double getPrice() {
+	public BigDecimal getPrice() {
 		return price;
 	}
 
-	public void setPrice(Double price) {
+	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
 

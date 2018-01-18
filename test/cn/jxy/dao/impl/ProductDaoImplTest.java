@@ -1,5 +1,6 @@
 package cn.jxy.dao.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.junit.AfterClass;
@@ -40,12 +41,12 @@ public class ProductDaoImplTest {
 
 	@Test
 	public void testSave() {
-		daoImpl.save(new Product("demo2", 3.14, "测试代码！！！"));
+		daoImpl.save(new Product("demo2", new BigDecimal(3.14), "测试代码！！！"));
 	}
 
 	@Test  // 只有条件@Test注解的方法,才是测试方法
 	public void testUpdate() {
-		Product product = new Product("demo2", 3.15, "测试代码2！！！");
+		Product product = new Product("demo2", new BigDecimal(3.15), "测试代码2！！！");
 		product.setId(5);
 		daoImpl.update(product);
 	}

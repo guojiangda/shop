@@ -1,8 +1,10 @@
 package cn.jxy.dao.impl;
 
+import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,8 +14,7 @@ import cn.jxy.utils.RowMapper;
 
 public class BaseDaoImpl<T> {
 
-	public List<T> queryByName(String sql, Object[] param,
-			RowMapper<T> rowMapper) {
+	public List<T> queryByName(String sql, Object[] param,Class<T> clazz) {
 		List<T> tList = new ArrayList<T>();
 		// 1: 获取connection连接对象
 		Connection conn = null;
@@ -28,13 +29,27 @@ public class BaseDaoImpl<T> {
 			}
 			// 查询返回的是结果集
 			rs = pre.executeQuery();
+			// 获取结果集的列名称
+			ResultSetMetaData metaData = rs.getMetaData();
 			while (rs.next()) {
-				// 不同sql语句查询结果集不同,因此此处代码并不是共性代码,因此在父类定义一个抽象方法,由子类去实现
-				// this,永远指向的是当前调用的对象
-				tList.add(rowMapper.mapRow(rs));
+				// 说明有结果集合,根据class类型动态创建一个对象
+				T model = (T)clazz.newInstance();
+				for (int i = 1; i <= metaData.getColumnCount(); i++) {
+					// 获取列的名称
+					String colName = metaData.getColumnLabel(i);
+					System.out.println("列名称为:" + colName);
+					// 根据列的名称获取相应的属性名称
+					Field name = clazz.getDeclaredField(colName);
+					// 值为 true 则指示反射的对象在使用时应该取消 Java 语言访问检查
+					name.setAccessible(true);
+					// 通过反射进行赋值
+					name.set(model, rs.getObject(colName));
+				}
+				// 把动态赋值的每个对象存放到list集合中
+				tList.add(model);
 			}
 			return tList;
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			throw new RuntimeException(e);
 		} finally {
 			// 4： 释放资源(数据库访问、IO、Properties、文件上传、下载都需要关闭相关操作)
@@ -43,7 +58,7 @@ public class BaseDaoImpl<T> {
 	}
 
 	// T 是不确定类型(不是Object),由子类决定具体的类型
-	protected T getById(String sql, Object id, RowMapper<T> rowMapper) {
+	protected T getById(String sql, Object id, Class<T> clazz) {
 		T model = null;
 		// 1: 获取connection连接对象
 		Connection conn = null;
@@ -57,12 +72,25 @@ public class BaseDaoImpl<T> {
 			// 查询返回的是结果集
 			rs = pre.executeQuery();
 			if (rs.next()) {
-				// 不同sql语句查询结果集不同,因此此处代码并不是共性代码,因此在父类定义一个抽象方法,由子类去实现
-				// this,永远指向的是当前调用的对象
-				model = rowMapper.mapRow(rs);
+				// 说明有结果集合,根据class类型动态创建一个对象
+				model = clazz.newInstance();
+				// 获取结果集的列名称
+				ResultSetMetaData metaData = rs.getMetaData();
+				System.out.println(metaData.getColumnCount());
+				for (int i = 1; i <= metaData.getColumnCount(); i++) {
+					// 获取列的名称
+					String colName = metaData.getColumnLabel(i);
+					System.out.println("列名称为:" + colName);
+					// 根据列的名称获取相应的属性名称
+					Field name = clazz.getDeclaredField(colName);
+					// 值为 true 则指示反射的对象在使用时应该取消 Java 语言访问检查
+					name.setAccessible(true);
+					// 通过反射进行赋值
+					name.set(model, rs.getObject(colName));
+				}
 			}
 			return model;
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			throw new RuntimeException(e);
 		} finally {
 			// 4： 释放资源
